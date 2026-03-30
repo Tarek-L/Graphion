@@ -1,0 +1,40 @@
+# BUILD & OUTPUT
+build/
+out/
+bin/
+dist/
+artifacts/
+.cache/
+
+# DEPENDENCIES
+deps/
+src/vendor/
+
+
+# IDEs & OS SPECIFIC
+# Visual Studio
+.vs/
+*.sln
+*.vcxproj
+*.user
+*.suo
+
+# VS Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# CLion / JetBrains
+.idea/
+cmake-build-*/
+
+# OS Junk
+.DS_Store
+Thumbs.db
+*.log
+
+# PYTHON / LUA TEMP
+__pycache__/
+*.pyc
+luac.out
