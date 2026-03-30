@@ -9,6 +9,7 @@ artifacts/
 # DEPENDENCIES
 deps/
 src/vendor/
+compile_flags.txt
 
 
 # IDEs & OS SPECIFIC

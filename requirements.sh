@@ -111,7 +111,7 @@ cmake --build . -j$(nproc)
 
 mkdir -p "$INC_DIR/glfw"
 
-cp -r ../include/GLFW/* "$INC_DIR/glfw"
+cp -r ../include/GLFW/* "$INC_DIR/GLFW"
 
 cp $(find . -name "libglfw3.a") "$LIB_DIR/"
 
@@ -126,14 +126,15 @@ echo "GLFW 3.4 installed to include/GLFW/ and lib/libglfw3.a"
 # GL_ARB_debug_output
 # GL_ARB_multisample
 # GL_ARB_texture_float 
-# omit KHR
 
 mkdir -p "$INC_DIR/glad"
+mkdir -p "$INC_DIR/KHR"
 cd "$SRC_DIR"
 unzip glad.zip -d glad
 rm glad.zip
 cd "$PROJECT_ROOT"
 cp -r "$SRC_DIR/glad/include/glad"/* "$INC_DIR/glad/"
+cp -r "$SRC_DIR/glad/include/KHR"/* "$INC_DIR/KHR/"
 
 mkdir -p "$PROJECT_ROOT/src/vendor"
 cp "$SRC_DIR/glad/src/glad.c" "$PROJECT_ROOT/src/vendor/"

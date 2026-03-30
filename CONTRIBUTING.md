@@ -12,7 +12,7 @@ All dependencies for this project are listed in `manifest.json`. Ultimately, it 
 $PROJECT_ROOT/deps
 ├── include
 │   ├── glad
-│   ├── glfw
+│   ├── GLFW
 │   ├── glm
 │   ├── imgui
 │   ├── lua
