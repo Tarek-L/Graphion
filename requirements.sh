@@ -109,7 +109,7 @@ cmake .. \
 
 cmake --build . -j$(nproc)
 
-mkdir -p "$INC_DIR/glfw"
+mkdir -p "$INC_DIR/GLFW"
 
 cp -r ../include/GLFW/* "$INC_DIR/GLFW"
 
