@@ -1,3 +1,43 @@
+/**
+ * @file logging.hpp
+ * @brief Lightweight debugging and logging utilities.
+ *
+ * This header provides helper functions and macros for:
+ *  - Clearing and logging OpenGL errors
+ *  - Wrapping OpenGL calls with automatic error checking (GL_CALL)
+ *  - Assertion handling in debug builds (ASSERT)
+ *  - Debug break abstraction across compilers
+ *  - Logging shortcuts using spdlog
+ *
+ * Usage:
+ *  Wrap OpenGL calls with GL_CALL(...) in debug builds to automatically
+ *  detect and report errors:
+ *
+ *      GL_CALL(glDrawArrays(GL_TRIANGLES, 0, 3));
+ *
+ *  Use ASSERT(expr) for debug-only checks:
+ *
+ *      ASSERT(ptr != nullptr);
+ *
+ * Behavior:
+ *  - In Debug:
+ *      * GL_CALL clears previous errors, executes the call, logs new errors,
+ *        and triggers a breakpoint if any occur.
+ *      * ASSERT logs failure and triggers a breakpoint.
+ *  - In Release (NDEBUG defined):
+ *      * GL_CALL executes normally (no overhead).
+ *      * ASSERT is disabled.
+ *
+ * Dependencies:
+ *  - glad (OpenGL loader)
+ *  - spdlog (logging)
+ *
+ * Notes:
+ *  - Uses __builtin_trap() (GCC/Clang) or __debugbreak() (MSVC) for breakpoints.
+ *  - Provides manual definitions for GL_STACK_OVERFLOW and GL_STACK_UNDERFLOW
+ *    if not available in headers.
+ */
+
 #pragma once
 
 #include <glad/glad.h>
@@ -34,9 +74,9 @@ inline bool GLLogCall(const char* function, const char* file, int line) {
 }
 
 #if defined(_MSC_VER)
-    #define GL_DEBUG_BREAK() __debugbreak()
+    #define DEBUG_BREAK() __debugbreak()
 #else
-    #define GL_DEBUG_BREAK() __builtin_trap()
+    #define DEBUG_BREAK() __builtin_trap()
 #endif
 
 #ifdef NDEBUG
@@ -46,18 +86,18 @@ inline bool GLLogCall(const char* function, const char* file, int line) {
         GLClearError(); \
         x; \
         if (GLLogCall(#x, __FILE__, __LINE__)) { \
-            GL_DEBUG_BREAK(); \
+            DEBUG_BREAK(); \
         } \
     } while (0)
 #endif
 
 #ifdef NDEBUG
-    #define ASSERT(x) ((void)0)
+    #define ASSERT(expr) ((void)0)
 #else
-    #define ASSERT(x) do { \
-        if (!(x)) { \
-            spdlog::error("[Assertion Failed] {} | {}:{}", #x, __FILE__, __LINE__); \
-            GL_DEBUG_BREAK(); \
+    #define ASSERT(expr) do { \
+        if (!(expr)) { \
+            spdlog::error("[Assertion Failed] {} | {}:{}", #expr, __FILE__, __LINE__); \
+            DEBUG_BREAK(); \
         } \
     } while (0)
 #endif
