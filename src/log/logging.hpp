@@ -92,11 +92,12 @@ inline bool GLLogCall(const char* function, const char* file, int line) {
 #endif
 
 #ifdef NDEBUG
-    #define ASSERT(expr) ((void)0)
+    #define ASSERT(expr, ...) ((void)0)
 #else
-    #define ASSERT(expr) do { \
+    #define ASSERT(expr, ...) do { \
         if (!(expr)) { \
-            spdlog::error("[Assertion Failed] {} | {}:{}", #expr, __FILE__, __LINE__); \
+            spdlog::error("[Assertion Failed] {} | {}:{} | " __VA_OPT__(<<) "{}", \
+                          #expr, __FILE__, __LINE__, ##__VA_ARGS__); \
             DEBUG_BREAK(); \
         } \
     } while (0)
