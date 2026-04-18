@@ -80,12 +80,12 @@ inline bool GLLogCall(const char* function, const char* file, int line) {
 #endif
 
 #ifdef NDEBUG
-    #define GL_CALL(x) x
+    #define GL_CALL(gl_func) gl_func
 #else
-    #define GL_CALL(x) do { \
+    #define GL_CALL(gl_func) do { \
         GLClearError(); \
-        x; \
-        if (GLLogCall(#x, __FILE__, __LINE__)) { \
+        gl_func; \
+        if (GLLogCall(#gl_func, __FILE__, __LINE__)) { \
             DEBUG_BREAK(); \
         } \
     } while (0)
