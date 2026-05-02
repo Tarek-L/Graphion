@@ -29,6 +29,8 @@ src/vendor/
 # CLion / JetBrains
 .idea/
 cmake-build-*/
+Makefile
+.clang-format
 
 # OS Junk
 .DS_Store
