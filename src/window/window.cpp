@@ -103,7 +103,7 @@ Window::Window(const char *title, int width, int height) : m_handle(nullptr) {
     glfwSetWindowUserPointer(m_handle, this);
     ASSERT(m_handle, "window is null");
     glfwSetFramebufferSizeCallback(m_handle, framebufferSizeCallback);
-    
+    eventSetupCallbacks();
 }
 
 Window::Window(Window &&other) noexcept
@@ -202,7 +202,89 @@ void Window::setPos(int x, int y) {
     glfwSetWindowPos(m_handle, x, y); 
 }
 
+void Window::eventSetupCallbacks()
+{
+    glfwSetKeyCallback(m_handle,
+    [](GLFWwindow* w, int key, int, int action, int)
+    {
+        auto* self = static_cast<Window*>(glfwGetWindowUserPointer(w));
+
+        Event e{};
+
+        if (action == GLFW_PRESS)
+        {
+            e.type = EventType::KeyPressed;
+            e.key.key = key;
+            self->m_eventQueue.push(e);
+            Input::setKeyDown(key);
+        }
+        else if (action == GLFW_RELEASE)
+        {
+            e.type = EventType::KeyReleased;
+            e.key.key = key;
+            self->m_eventQueue.push(e);
+            Input::setKeyUp(key);
+        }
+    });
+
+    glfwSetCursorPosCallback(m_handle,
+    [](GLFWwindow* w, double x, double y)
+    {
+        auto* self = static_cast<Window*>(glfwGetWindowUserPointer(w));
+
+        Event e{};
+        e.type = EventType::MouseMoved;
+        e.mouseMove.x = (float)x;
+        e.mouseMove.y = (float)y;
+
+        self->m_eventQueue.push(e);
+    });
+
+    glfwSetMouseButtonCallback(m_handle,
+    [](GLFWwindow* w, int button, int action, int)
+    {
+        auto* self = static_cast<Window*>(glfwGetWindowUserPointer(w));
+
+        Event e{};
+        e.type = (action == GLFW_PRESS)
+            ? EventType::MouseButtonPressed
+            : EventType::MouseButtonReleased;
+
+        e.mouseButton.button = button;
+
+        self->m_eventQueue.push(e);
+    });
+
+    glfwSetWindowCloseCallback(m_handle,
+    [](GLFWwindow* w)
+    {
+        auto* self = static_cast<Window*>(glfwGetWindowUserPointer(w));
+
+        Event e{};
+        e.type = EventType::WindowClose;
+
+        self->m_eventQueue.push(e);
+    });
+}
+
+void Window::poll()
+{
+    glfwPollEvents();
+}
+
+const std::vector<Event>& Window::events() const
+{
+    return m_eventQueue.events();
+}
+
+void Window::clearEvents()
+{
+    m_eventQueue.clear();
+}
+
 void Window::beginFrame() {
+
+    poll();
 
     GL_CALL(glClearColor(background.r, background.g, background.b,
                          background.a));
@@ -219,6 +301,8 @@ void Window::beginFrame() {
 }
 void Window::endFrame() {
     glfwSwapBuffers(m_handle);
+    Input::clearKeyState();
+    clearEvents();
 }
 
 } 
