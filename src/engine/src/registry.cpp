@@ -1,4 +1,6 @@
 
+//registry.cpp
+
 #include "registry.hpp"
 #include "logging.hpp"
 #include <cstring>
@@ -26,7 +28,7 @@ Shader* Registry::getShader(const char* name) {
         return m_Shaders[name].get();
     if (0 == std::strcmp(name, "basic")) {
 
-        m_Shaders["basic"] = std::make_unique<Shader>("../../../assets/shaders/basic.vert", "../../../assets/shaders/basic.frag");
+        m_Shaders["basic"] = std::make_unique<Shader>("../../assets/shaders/basic.vert", "../../assets/shaders/basic.frag");
         return m_Shaders["basic"].get();
     }
     return nullptr;
@@ -56,7 +58,7 @@ Mesh* Registry::m_createSquare() {
     GL_CALL(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0));
     GL_CALL(glEnableVertexAttribArray(0));
         
-    GL_CALL(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(sizeof(float))));
+    GL_CALL(glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(3 * sizeof(float))));
     GL_CALL(glEnableVertexAttribArray(1));
          
     GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO));
@@ -94,7 +96,7 @@ Mesh* Registry::m_createTriangle() {
     GL_CALL(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0));
     GL_CALL(glEnableVertexAttribArray(0));
         
-    GL_CALL(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(sizeof(float))));
+    GL_CALL(glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(3 * sizeof(float))));
     GL_CALL(glEnableVertexAttribArray(1));
         
     GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO));
@@ -131,7 +133,7 @@ Mesh* Registry::m_createErrorTriangle() {
     GL_CALL(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0));
     GL_CALL(glEnableVertexAttribArray(0));
 
-    GL_CALL(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(sizeof(float))));
+    GL_CALL(glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(3 * sizeof(float))));
     GL_CALL(glEnableVertexAttribArray(1));
 
     GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO));
@@ -197,7 +199,7 @@ Mesh* Registry::m_createCircle() {
     GL_CALL(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0));
     GL_CALL(glEnableVertexAttribArray(0));
         
-    GL_CALL(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(sizeof(float))));
+    GL_CALL(glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(3 * sizeof(float))));
     GL_CALL(glEnableVertexAttribArray(1));
         
         
