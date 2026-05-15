@@ -1,4 +1,6 @@
 
+//entity.hpp
+
 #pragma once 
 #include "mesh.hpp"
 #include "shader.hpp"

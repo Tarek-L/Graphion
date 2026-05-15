@@ -1,10 +1,18 @@
 
-#pragma once 
+//renderer.hpp
+#pragma once
+ 
 #include "entity.hpp"
-
-class Renderer {
+ 
+class Renderer
+{
 public:
-    void clear() const;
+    static void init();
 
-    void draw(const Entity& entity) const;
+    static void draw(const Entity& entity);
+ 
+    Renderer()              = delete;
+    Renderer(const Renderer&) = delete;
+    Renderer& operator=(const Renderer&) = delete;
 };
+ 
